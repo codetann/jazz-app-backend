@@ -20,7 +20,7 @@ router.get("/schedule", (req, res) => {
 
   // axios fetchting url
   axios
-    .get(url)
+    .get(url, { headers: { "Content-Type": "application/json" } })
     .then((body) => {
       // initialize empty array
       const schedule = [];
@@ -30,27 +30,39 @@ router.get("/schedule", (req, res) => {
 
       // iterate through jazz schedule
       // parses the data that is received to an object that displays date, opponent, time, and logo
+      // section is currently a mess need to refactor this code to be more readable
       $(".Table__TR.Table__TR--sm.Table__even").each((i, element) => {
+        // parses the elements to data for the game object
+        const temp = $(element).find("span > :nth-child(1)").text().split(" ");
         const date = $(element).find("span").first().text();
         if (date === "DATE") return;
-        const temp = $(element).find("span > :nth-child(1)").text().split(" ");
         const opponent = controller.parseName(temp[1], temp[2]);
+        const location = controller.parseLocation($(element).text());
         const time = controller.parseTime(temp[2], temp[3]);
+        const result = controller.parseResult(
+          $(element).find(".fw-bold.clr-positive").text() ||
+            $(element).find(".fw-bold.clr-negative").text()
+        );
+        const score = controller.parseScore(temp[2], temp[3]);
         const logo = controller.parseImg(
           $(element).find("span > :nth-child(1) img").attr("src")
         );
+        // game object
         const game = {
           date: date,
           opponent: opponent,
           time: time,
+          result: result,
+          score: score,
+          location: location,
           logo: logo,
         };
         // adds game object to the schedule array
         schedule.push(game);
       });
-      console.log(schedule);
+
       // send to browser
-      res.send("schedule");
+      res.send(schedule);
     })
     .catch((error) => console.log(error));
 });
