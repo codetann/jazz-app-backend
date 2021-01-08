@@ -13,3 +13,9 @@ exports.parseTime = (time1, time2) => {
   if (time1.includes("-")) return time1;
   if (time2.includes("-")) return time2;
 };
+
+exports.parseImg = (url) => {
+  const newUrl = url.replace(/50/g, "300");
+  const finalUrl = newUrl.replace(/3000/g, "500");
+  return finalUrl;
+};
