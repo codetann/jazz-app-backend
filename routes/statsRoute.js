@@ -3,8 +3,6 @@ const axios = require("axios").default;
 const cheerio = require("cheerio");
 const router = express.Router();
 
-const controller = require("../controllers/statsController");
-
 const stats = [
   "gp",
   "gs",
@@ -24,12 +22,23 @@ const stats = [
 
 router.get("/stats", (req, res) => {
   const url = "https://www.espn.com/nba/team/stats/_/name/utah";
+  const imgUrl = "https://www.nba.com/jazz/roster/grid";
 
   const players = [];
   const allStats = [];
+  const imgs = [];
+
+  /*
+    The first .then scrapes player data from espn.com 
+        - creates an object with two values players and stats
+
+    The second .then scrapes players photos from nba.com
+        - adds the links to player in players array.
+  */
 
   axios
     .get(url)
+    // --- REQUEST #1 --- //
     .then((body) => {
       // itialize cheerio
       const $ = cheerio.load(body.data);
@@ -65,11 +74,31 @@ router.get("/stats", (req, res) => {
             });
           allStats.push(playerStats);
         });
-      const data = {
-        players: players,
-        stats: allStats,
-      };
-      res.send(data);
+      console.log("[axios] - second request ran");
+    })
+    //
+    //
+    // --- REQUEST #2 --- //
+    .then((data) => {
+      axios
+        .get(imgUrl)
+        .then((body) => {
+          const $ = cheerio.load(body.data);
+          $(".roster__player__bust").each((i, e) => {
+            const name = $(e).attr("alt");
+            const link = $(e).attr("src");
+            const found = players.find((player) => player.name === name);
+            if (found) {
+              found.img = link;
+            }
+          });
+          const data = {
+            players: players,
+            stats: allStats,
+          };
+          res.send(data);
+        })
+        .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
 });
