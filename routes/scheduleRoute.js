@@ -13,6 +13,8 @@ const controller = require("../controllers/scheduleController");
   receives.
 
   TODO: add any team schedule functionality 
+  TODO: add functionality to show times in local timezones
+  TODO: fix lakers and clippers names
 */
 
 router.get("/schedule", (req, res) => {
@@ -35,6 +37,7 @@ router.get("/schedule", (req, res) => {
         // parses the elements to data for the game object
         const temp = $(element).find("span > :nth-child(1)").text().split(" ");
         const date = $(element).find("span").first().text();
+        // ... checks to see if any text before the schedule is selected
         if (date === "DATE") return;
         const opponent = controller.parseName(temp[1], temp[2]);
         const location = controller.parseLocation($(element).text());
@@ -49,19 +52,19 @@ router.get("/schedule", (req, res) => {
         );
         // game object
         const game = {
-          date: date,
-          opponent: opponent,
-          time: time,
-          result: result,
-          score: score,
-          location: location,
-          logo: logo,
+          date,
+          opponent,
+          time,
+          result,
+          score,
+          location,
+          logo,
         };
         // adds game object to the schedule array
         schedule.push(game);
       });
 
-      // send to browser
+      // sends schedule to frontend
       res.send(schedule);
     })
     .catch((error) => console.log(error));

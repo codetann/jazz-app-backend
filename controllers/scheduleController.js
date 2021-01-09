@@ -7,6 +7,8 @@ exports.parseName = (name1, name2) => {
 };
 
 exports.parseTime = (time1, time2) => {
+  // if the game is live it will show as undefined.
+  if (time1 === undefined || time2 === undefined) return "Live";
   if (time1 === undefined) return;
   if (time1.includes(":")) return time1;
   if (time2.includes(":")) return time2;
@@ -36,6 +38,8 @@ exports.parseResult = (result) => {
 };
 
 exports.parseScore = (score1, score2) => {
+  // if the game is live the score will show as undefined
+  if (score1 === undefined || score2 === undefined) return false;
   if (score1.includes("-")) {
     return score1;
   } else if (score2.includes("-")) {
