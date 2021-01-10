@@ -4,7 +4,7 @@ const axios = require("axios").default;
 const cheerio = require("cheerio");
 
 router.get("/stream", (req, res) => {
-  const url = "http://nbastream.tv/utah-jazz-live-stream/";
+  const url = "https://nbastream.tv/utah-jazz-live-stream/";
 
   // axios fetchting url
   axios
