@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require("path");
+const cors = require("cors");
 const app = express();
 
 const homeRoute = require("./routes/homeRoute");
@@ -8,6 +8,7 @@ const scheduleRoute = require("./routes/scheduleRoute");
 const statsRoute = require("./routes/statsRoute");
 
 // middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
