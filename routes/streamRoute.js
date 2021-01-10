@@ -12,7 +12,8 @@ router.get("/stream", (req, res) => {
     .then((body) => {
       // initiate cheerio to grab link from nbastreams.tv
       const $ = cheerio.load(body.data);
-      const link = $(".videoWrapper iframe").attr("src");
+      const httpLink = $(".videoWrapper iframe").attr("src");
+      const link = httpLink.slice(0, 4) + "s" + httpLink.slice(4);
       res.send({ link: link });
     })
     .catch((error) => console.log(error));
