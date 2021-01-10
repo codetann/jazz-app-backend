@@ -74,7 +74,6 @@ router.get("/stats", (req, res) => {
             });
           allStats.push(playerStats);
         });
-      console.log("[axios] - second request ran");
     })
     //
     //
