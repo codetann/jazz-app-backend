@@ -8,7 +8,7 @@ const scheduleRoute = require("./routes/scheduleRoute");
 const statsRoute = require("./routes/statsRoute");
 
 // middleware
-app.use(cors());
+
 app.use(express.json());
 app.use(express.static("public"));
 
