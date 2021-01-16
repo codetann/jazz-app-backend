@@ -14,6 +14,8 @@ I do not own any of the data that is scraped from these web sites. This project 
 
 NOTE: App currently takes a while to load up. Need to find way to speed up process.
 
+UPDATE: App currently is not working. Problem with loading resources through cheerio
+
 ### `Link`
 
 Link to production application: https://inspiring-nobel-5a54e3.netlify.app/
